@@ -1,0 +1,4 @@
+<launch>
+  <node name="laser_to_image" pkg="GFD_test" type="laser_to_image.py" output="screen">
+  </node>
+</launch>

@@ -1,0 +1,43 @@
+<!-- <launch>
+  <include file="$(find clbrobot)/launch/lidar/$(env RIKILIDAR).launch" />
+  <include file="$(find clbrobot)/param/navigation/slam_gmapping.xml" />
+  <include file="$(find clbrobot)/param/navigation/move_base.xml" />
+  <include file="$(find exploration_server)/launch/exploration.launch" />
+</launch> -->
+
+<launch>
+  <!-- Arguments -->
+  <arg name="slam_methods" default="gmapping" doc="slam type [gmapping, hector, karto, cartographer]"/>
+  <arg name="open_rviz" default="false"/>
+  <arg name="simulation" default= "false"/> 
+  <arg name="planner"  default="teb" doc="opt: dwa, teb"/> 
+
+  <param name="/use_sim_time" value="$(arg simulation)" />  
+
+  <!-- simulation robot with lidar and map-->
+  <group if="$(arg simulation)">
+    <include file="$(find codbot_lidar_slam)/simulation/simulation_robot.launch"/>
+  </group>
+
+  <!-- SLAM: Gmapping, Cartographer, Hector, Karto -->
+  <include file="$(find codbot_lidar_slam)/launch/includes/$(arg slam_methods).launch">
+    <arg name="simulation"            value="$(arg simulation)"/>
+  </include>
+  
+  <!-- move_base -->
+  <group unless="$(eval planner == '')">
+    <include file="$(find codbot_lidar_slam)/launch/move_base.launch" unless="$(eval planner == '')">
+        <arg name="planner"            value="$(arg planner)"/>
+    </include>
+  </group>
+
+  
+  <include file="$(find exploration_server)/launch/exploration.launch" />
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find codbot_lidar_slam)/rviz/auto_slam.rviz"/>
+  </group>
+  
+</launch>

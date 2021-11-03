@@ -1,0 +1,22 @@
+<launch>
+
+  
+  <node pkg="nodelet" type="nodelet" name="codbot_follower"
+        args="load codbot_follower/CodbotFollower camera/camera_nodelet_manager" output="screen">
+ 	
+	<remap from="codbot_follower/cmd_vel" to="/cmd_vel"/>
+    <param name="enabled" value="true" />  <!-- enable/disable following -->
+    <param name="x_scale" value="2.0" />   <!-- turn amplitude facor -->
+    <param name="z_scale" value="0.3" />   <!-- ignored -->
+    <param name="min_x" value="-1.0" />  <!-- scan box size in meters, horiz from ctr -->
+    <param name="max_x" value="1.0" />   <!-- scan box size in meters, horiz from ctr -->
+    <param name="min_y" value="0.1" /> <!-- scan box size in meters, distance up from floor -->
+    <param name="max_y" value="2.0" /> <!-- scan box size in meters, distance up from floor -->
+    <param name="max_z" value="0.8" /> <!-- scan box size in meters, horiz depth from camera -->
+    <param name="goal_z" value="0.15" /> <!-- distance to hold target centroid, distance from camera -->
+    <param name="z_tol" value="0.1" />  <!-- +/- tolerance distance to hold target centroid, distance from camera -->
+    <param name="x_tol" value="0.15" /> <!-- +/- tolerance distance to hold target centroid, lateral -->
+  </node>
+	
+</launch>
+

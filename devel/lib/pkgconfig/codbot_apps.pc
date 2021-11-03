@@ -1,0 +1,8 @@
+prefix=/home/codbot/codbot_ws/devel
+
+Name: codbot_apps
+Description: Description of codbot_apps
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

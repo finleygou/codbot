@@ -1,0 +1,11 @@
+<launch>
+
+<!-- Detection node -->
+<node pkg="codbot_line_follower" name="detection" type="detect" cwd="node" output="log">
+</node>
+
+<!-- Robot commands node -->
+<node pkg="codbot_line_follower" name="Velocity" type="navig" cwd="node" output="log">
+</node>
+
+</launch>

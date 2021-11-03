@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC   -shared -Wl,-soname,libcodbot_base.so -o /home/codbot/codbot_ws/devel/lib/libcodbot_base.so CMakeFiles/codbot_base.dir/src/codbot_base.cpp.o 

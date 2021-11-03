@@ -1,0 +1,23 @@
+<launch>
+  <arg name="planner"  default="teb" doc="opt: dwa, teb"/> 
+  <arg name="map_file" default="$(find codbot_lidar_slam)/maps/home1.yaml"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)">
+      <param name="frame_id" value="map"/>
+  </node>
+
+   <!-- AMCL -->
+    <node pkg="amcl" type="amcl" name="amcl" output="screen">
+      <rosparam file="$(find codbot_lidar_slam)/param/$(env BASE_TYPE)/amcl_params.yaml" command="load" />
+      <param name="initial_pose_x"            value="0.0"/>
+      <param name="initial_pose_y"            value="0.0"/>
+      <param name="initial_pose_a"            value="0.0"/>
+    </node>
+  </group>
+
+    <!-- move_base -->
+  <group unless="$(eval planner == '')">
+    <include file="$(find codbot_lidar_slam)/launch/move_base.launch" unless="$(eval planner == '')">
+        <arg name="planner"            value="$(arg planner)"/>
+    </include>
+  </group>
+</launch>

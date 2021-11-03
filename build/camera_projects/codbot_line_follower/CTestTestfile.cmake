@@ -1,0 +1,8 @@
+# CMake generated Testfile for 
+# Source directory: /home/codbot/codbot_ws/src/camera_projects/codbot_line_follower
+# Build directory: /home/codbot/codbot_ws/build/camera_projects/codbot_line_follower
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(_ctest_codbot_line_follower_rostest_test_test_detect.launch "/home/codbot/codbot_ws/build/catkin_generated/env_cached.sh" "/usr/bin/python2" "/opt/ros/melodic/share/catkin/cmake/test/run_tests.py" "/home/codbot/codbot_ws/build/test_results/codbot_line_follower/rostest-test_test_detect.xml" "--return-code" "/usr/bin/python2 /opt/ros/melodic/share/rostest/cmake/../../../bin/rostest --pkgdir=/home/codbot/codbot_ws/src/camera_projects/codbot_line_follower --package=codbot_line_follower --results-filename test_test_detect.xml --results-base-dir \"/home/codbot/codbot_ws/build/test_results\" /home/codbot/codbot_ws/src/camera_projects/codbot_line_follower/test/test_detect.launch ")
+add_test(_ctest_codbot_line_follower_rostest_test_test_navig.launch "/home/codbot/codbot_ws/build/catkin_generated/env_cached.sh" "/usr/bin/python2" "/opt/ros/melodic/share/catkin/cmake/test/run_tests.py" "/home/codbot/codbot_ws/build/test_results/codbot_line_follower/rostest-test_test_navig.xml" "--return-code" "/usr/bin/python2 /opt/ros/melodic/share/rostest/cmake/../../../bin/rostest --pkgdir=/home/codbot/codbot_ws/src/camera_projects/codbot_line_follower --package=codbot_line_follower --results-filename test_test_navig.xml --results-base-dir \"/home/codbot/codbot_ws/build/test_results\" /home/codbot/codbot_ws/src/camera_projects/codbot_line_follower/test/test_navig.launch ")

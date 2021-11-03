@@ -1,0 +1,7 @@
+<library path="lib/libcodbot_follower">
+  <class name="codbot_follower/CodbotFollower" type="codbot_follower::CodbotFollower" base_class_type="nodelet::Nodelet">
+    <description>
+      The codbot people follower node.
+    </description>
+  </class>
+</library> 

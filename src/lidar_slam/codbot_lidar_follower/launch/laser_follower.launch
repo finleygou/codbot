@@ -1,0 +1,5 @@
+<launch>
+  
+  <include file='$(find codbot_lidar_follower)/launch/include/laserTracker.launch' />
+  <include file='$(find codbot_lidar_follower)/launch/include/follower.launch' />
+</launch>

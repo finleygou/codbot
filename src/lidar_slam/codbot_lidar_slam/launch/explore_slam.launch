@@ -1,0 +1,3 @@
+<launch>
+    <node name="multi_mark" pkg="codbot_lidar_slam" type="exploring_slam.py" output="screen" />
+</launch>

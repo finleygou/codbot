@@ -1,0 +1,8 @@
+prefix=/home/codbot/codbot_ws/install
+
+Name: codbot_follower
+Description: Description of codbot_follower
+Version: 2.3.7
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lcodbot_follower
+Requires: nodelet roscpp visualization_msgs depth_image_proc dynamic_reconfigure

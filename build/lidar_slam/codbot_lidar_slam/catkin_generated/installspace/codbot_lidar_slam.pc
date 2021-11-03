@@ -1,0 +1,8 @@
+prefix=/home/codbot/codbot_ws/install
+
+Name: codbot_lidar_slam
+Description: Description of codbot_lidar_slam
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,95 @@
+<launch>
+  <arg name="localization"      default="false"/>
+  <arg name="wait_for_transform"  default="1.0"/> 
+  <arg name="database_path"     default="rtabmap.db"/>
+
+  <arg     if="$(arg localization)" name="args"  default=""/>
+  <arg unless="$(arg localization)" name="args"  default="--delete_db_on_start"/>
+
+  <arg name="open_rviz" default="false"/>
+  <arg name="planner"  default="teb" doc="opt: dwa, teb"/>
+  <!--node pkg="tf" type="static_transform_publisher" name="odom2map_publisher" args="0 0 0 0 0 0 map odom 10" /-->
+  <group ns="rtabmap">
+
+    <!-- Use RGBD synchronization -->
+    <!-- Here is a general example using a standalone nodelet, 
+         but it is recommended to attach this nodelet to nodelet 
+         manager of the camera to avoid topic serialization -->
+    <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync" output="screen">
+      <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
+      <remap from="depth/image"     to="/camera/depth/image_raw"/>
+      <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
+      <remap from="rgbd_image"      to="rgbd_image"/> <!-- output -->
+      
+      <!-- Should be true for not synchronized camera topics 
+           (e.g., false for kinectv2, zed, realsense, true for xtion, kinect360)-->
+      <param name="approx_sync"       value="true"/> 
+    </node>
+
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="$(arg args)">
+          <param name="frame_id" type="string" value="base_footprint"/>
+
+          <param name="subscribe_depth" type="bool" value="false"/>
+          <param name="subscribe_rgb" type="bool" value="false"/>
+          <param name="subscribe_rgbd" type="bool" value="true"/>
+          <param name="subscribe_scan" type="bool" value="true"/>
+          <!-- inputs -->
+          <remap from="odom" to="/odom"/>
+          <remap from="scan" to="/scan"/>
+          <remap from="rgbd_image" to="rgbd_image"/>
+          <param name="queue_size" type="int" value="10"/>
+          <!-- output -->
+          <remap from="grid_map" to="/map"/>
+
+          <!-- RTAB-Map's parameters -->
+          <param name="RGBD/ProximityPathMaxNeighbors" type="string" value="10"/>
+          <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
+          <param name="RGBD/ProximityBySpace"     type="string" value="true"/>
+          <param name="RGBD/AngularUpdate"        type="string" value="0.01"/>
+          <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
+          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/>
+          <param name="Grid/FromDepth"            type="string" value="false"/> <!-- occupancy grid from lidar -->
+          <param name="Reg/Force3DoF"             type="string" value="true"/> <!-- 2D SLAM -->
+          <param name="Reg/Strategy"              type="string" value="1"/>  <!-- 0=Visual, 1=ICP (1 requires scan)-->
+          
+	  <!-- Rate (Hz) at which new nodes are added to map -->
+          <param name="Rtabmap/DetectionRate" type="string" value="0.5"/> 
+          <!-- Loop Closure Detection -->
+          <!-- 0=SURF 1=SIFT 2=ORB 3=FAST/FREAK 4=FAST/BRIEF 5=GFTT/FREAK 6=GFTT/BRIEF 7=BRISK 8=GFTT/ORB 9=KAZE-->
+          <param name="Kp/DetectorStrategy" type="string" value="8"/> 
+          <!-- Maximum visual words per image (bag-of-words) -->
+          <param name="Kp/MaxFeatures" type="string" value="400"/>  
+          <!-- Used to extract more or less SURF features -->
+          <param name="SURF/HessianThreshold" type="string" value="100"/>
+          <!-- Minimum visual inliers to accept loop closure -->
+          <param name="Vis/MinInliers" type="string" value="15"/> 
+          <!-- Set to false to avoid saving data when robot is not moving -->
+          <param name="Mem/NotLinkedNodesKept" type="string" value="false"/>
+
+
+          <!-- localization mode -->
+          <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
+          <param unless="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="true"/>
+          <param name="Mem/InitWMWithAllNodes" type="string" value="$(arg localization)"/> 
+          <!-- ICP parameters -->
+          <param name="Icp/VoxelSize"                 type="string" value="0.05"/>
+          <param name="Icp/MaxCorrespondenceDistance" type="string" value="0.1"/>
+    </node>
+  </group>
+
+<!-- move_base -->
+  <group unless="$(eval planner == '')">
+    <include file="$(find codbot_vslam)/launch/move_base.launch" unless="$(eval planner == '')">
+        <arg name="planner"            value="$(arg planner)"/>
+    </include>
+  </group>
+
+
+  <include file="$(find exploration_server)/launch/exploration.launch" />
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find codbot_vslam)/rviz/auto_slam.rviz"/>
+  </group>
+</launch>

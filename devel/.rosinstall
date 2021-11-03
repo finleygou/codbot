@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/codbot/codbot_ws/devel/setup.sh

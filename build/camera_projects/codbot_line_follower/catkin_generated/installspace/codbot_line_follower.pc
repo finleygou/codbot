@@ -1,0 +1,8 @@
+prefix=/home/codbot/codbot_ws/install
+
+Name: codbot_line_follower
+Description: Description of codbot_line_follower
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 

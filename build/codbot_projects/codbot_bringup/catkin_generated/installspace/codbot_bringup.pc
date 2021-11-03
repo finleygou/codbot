@@ -1,0 +1,8 @@
+prefix=/home/codbot/codbot_ws/install
+
+Name: codbot_bringup
+Description: Description of codbot_bringup
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
